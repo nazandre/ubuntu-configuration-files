@@ -1,0 +1,80 @@
+conky.config = {
+    alignment = 'middle_right',
+    background = false,
+    default_color = 'white',
+    default_outline_color = 'white',
+    default_shade_color = 'white',
+    draw_borders = false,
+    draw_graph_borders = true,
+    draw_outline = false,
+    draw_shades = false,
+    use_xft = true,
+    font = 'DejaVu Sans Mono:size=12',
+    minimum_height = 5,
+    --Minimum size of text area
+    minimum_width = 280,
+    --maximum_width = 500,
+     -- prevent from flashing:
+    double_buffer = true,
+    out_to_console = false,
+    out_to_stderr = false,
+    own_window = true,
+    own_window_class = 'Conky',
+    own_window_type = 'normal',
+    own_window_transparent = true,
+    own_window_argb_visual = true,
+    own_window_argb_value = 0,
+    own_window_hints = 'undecorated', 'below', 'sticky',
+    update_interval = 1.0,
+    -- number of sample to average for CPU, disk, net monitoring
+    cpu_avg_samples = 2,
+    diskio_avg_samples = 2,
+    net_avg_samples = 2,
+    -- subtract file system buffers from used memory
+    no_buffers = true
+}
+
+conky.text = [[
+$nodename
+${execi 99999 lsb_release -sd} (${execi 99999 lsb_release -sc})
+$sysname $kernel $machine
+$hr
+${color grey}CPU: $color ${execi 1000 cat /proc/cpuinfo | grep 'model name' | cut -c 13-40 | uniq}
+${color grey}Frequency:$color $freq_g GHz
+${color grey}Usage: $color $cpu% ${cpubar 4}
+${color grey}Temperature: $color ${hwmon 1 temp 1}°C
+$hr
+Time: ${time %H:%M} Date: ${time %d.%m.%Y}
+${execi 300 ~/.conky/scripts/weather.sh CITY1}
+${execi 300 ~/.conky/scripts/weather.sh CITY2}
+$hr
+${color grey}Uptime:$color $uptime
+${color grey}RAM:$color $mem/$memmax - $memperc% ${membar 4}
+${color grey}Swap:$color $swap/$swapmax - $swapperc% ${swapbar 4}
+$hr
+${color grey}File systems:
+${color grey} / $color${fs_used /}/${fs_size /} (${fs_used_perc /}%)
+# not folder, only file systems... can run "du -sh" but slow.
+#${color grey} /home $color${fs_used}/${fs_size /} (${fs_used_perc /home}%)
+$hr
+${color grey}Networking:
+LAN (eth0):
+${goto 40}IP address: $color${addr eth0}
+${goto 40}${color grey}Up:$color ${upspeed eth0}${color grey} Down:$color ${downspeed eth0}
+${color grey}Wi-Fi (wlan0):
+${goto 40}${color grey}Essid: $color ${wireless_essid wlan0} (${wireless_link_qual_perc wlan0}%)
+${goto 40}${color grey}Bitrate: $color ${wireless_bitrate wlan0} 
+${goto 40}${color grey}IP address:$color ${addr wlan0}
+${goto 40}${color grey}Up:$color ${upspeed wlan0}${color grey} Down:$color ${downspeed wlan0}
+${goto 40}${color grey}Since reboot:
+${goto 80}${color grey}Up:$color ${totalup wlan0} ${color grey} Down:$color ${totaldown wlan0}
+${goto 40}${color grey}Month: ${execi 1000 vnstat -m | grep "`date +"'%y"`" | tail -1 | awk '{print $3 $4}'}
+${color grey}gateway IP:$color ${gw_ip} ($gw_iface)
+$hr
+${color grey}Name              PID   CPU%   MEM%
+${color lightgrey} ${top name 1} ${top pid 1} ${top cpu 1} ${top mem 1}
+${color lightgrey} ${top name 2} ${top pid 2} ${top cpu 2} ${top mem 2}
+${color lightgrey} ${top name 3} ${top pid 3} ${top cpu 3} ${top mem 3}
+${color lightgrey} ${top name 4} ${top pid 4} ${top cpu 4} ${top mem 4}
+${color lightgrey} ${top name 5} ${top pid 5} ${top cpu 5} ${top mem 5}
+]]

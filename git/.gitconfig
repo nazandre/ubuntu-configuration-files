@@ -1,0 +1,9 @@
+[core]
+	editor = emacs
+[user]
+	name = ? 
+	email = ?
+[diff]
+	renames = true
+[push]
+	default = simple
